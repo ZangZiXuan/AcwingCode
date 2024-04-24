@@ -16,6 +16,8 @@ public class nQueen {
     static boolean[] col =  new boolean[N];
     static boolean[] dg =  new boolean[N];
     static boolean[] udg =  new boolean[N];
+//    方法2
+    static boolean[] row =  new boolean[N];
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -25,7 +27,7 @@ public class nQueen {
                 g[i][j] =  '`'; // 设置默认值
             }
         }
-        dfs(0);
+        dfs(0,0,0);
     }
     static void dfs(int u){
         if(u == n){
@@ -48,6 +50,39 @@ public class nQueen {
                 col[i] = dg[u + i] = udg[n - u + i] = false;
                 g[u][i] = '`';
             }
+        }
+    }
+
+    static void dfs(int x,int y,int s){
+        if(y == n){
+            y = 0;
+            x++;
+        }
+
+        if(x == n){
+            if(s == n){
+                for(int i = 0; i < n; i++){
+                    for(int j = 0; j < n;j++){
+                        if(!String.valueOf(g[i][j]).equals("")){
+                            System.out.print(g[i][j]);
+                            System.out.print(" ");
+                        }
+                    }
+                    System.out.println();
+                }
+            }
+            return;
+        }
+//      不放皇后
+        dfs(x,y+1,s);
+
+//      放皇后
+        if(!row[x] && !col[y] && !dg[x+y] && !udg[x-y+n]){
+            g[x][y] = 'Q';
+            row[x] = col[y] = dg[x+y] = udg[x-y+n] = true;
+            dfs(x,y+1,s+1);
+            row[x] = col[y] = dg[x+y] = udg[x-y+n] = false;
+            g[x][y] = '`';
         }
     }
 }
